@@ -74,6 +74,10 @@ public class MainList extends Fragment {
             final String title = "title";
             final String image = "poster_path";
             final String result = "results";
+            final String backDrop = "backdrop_path";
+            final String desc = "overview";
+            final String date = "release_date";
+            final String rate = "vote_average";
             String baseImage = "https://image.tmdb.org/t/p/w600";
 
             JSONObject movieJson = new JSONObject(moviesStr);
@@ -83,9 +87,13 @@ public class MainList extends Fragment {
                 JSONObject oneMovie = moviesArray.getJSONObject(i);
                 String oneTitle = oneMovie.getString(title);
                 String oneImage = baseImage + oneMovie.getString(image);
-                Movies m = new Movies(oneImage,oneTitle);
+                String oneDesc = oneMovie.getString(desc);
+                String oneDate = oneMovie.getString(date);
+                String back = baseImage + oneMovie.getString(backDrop);
+                int oneRate = oneMovie.getInt(rate);
+                Movies m = new Movies(oneImage,oneTitle,oneDate,oneDesc,back,oneRate);
                 moviesList.add(m);
-                Log.v(LOG_TAG, "Movie Data : Name : " + moviesList.get(i).getName() + "    Image : " + moviesList.get(i).getImage());
+//                Log.v(LOG_TAG, "Movie Data : Name : " + moviesList.get(i).getName() + "    Image : " + moviesList.get(i).getImage());
             }
             return true;
         }

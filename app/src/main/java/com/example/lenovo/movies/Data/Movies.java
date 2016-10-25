@@ -6,11 +6,16 @@ package com.example.lenovo.movies.Data;
 
 public class Movies {
 
-    private String image,name,date,rate,overview,backdrop,language;
+    private String image,name,date,overview,backdrop;
+    private int rate;
 
-    public Movies(String image, String name) {
+    public Movies(String image, String name, String date, String overview, String backdrop, int rate) {
         this.image = image;
         this.name = name;
+        this.date = date;
+        this.overview = overview;
+        this.backdrop = backdrop;
+        this.rate = rate;
     }
 
     public String getImage() {
@@ -25,7 +30,7 @@ public class Movies {
         return date;
     }
 
-    public String getRate() {
+    public int getRate() {
         return rate;
     }
 
@@ -35,9 +40,5 @@ public class Movies {
 
     public String getBackdrop() {
         return backdrop;
-    }
-
-    public String getLanguage() {
-        return language;
     }
 }
