@@ -37,7 +37,7 @@ import java.util.ArrayList;
  * Created by Lenovo on 10/21/2016.
  */
 
-public class MainList extends Fragment {
+public class MainList extends Fragment implements AdapterView.OnItemClickListener {
     ListView list;
     ArrayList<Movies> moviesList;
     Context context = getActivity();
@@ -52,19 +52,14 @@ public class MainList extends Fragment {
         moviesList = new ArrayList<>();
         new MoviesAsyncTask().execute();
         con = (connection) getActivity();
-
-
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                con.set(moviesList.get(i));
-            }
-        });
-
+        list.setOnItemClickListener(this);
         return root;
     }
 
-
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        con.set(moviesList.get(i));
+    }
 
 
     public class MoviesAsyncTask extends AsyncTask<Void , Void , Boolean>{
