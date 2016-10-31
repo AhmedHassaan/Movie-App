@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity implements connection {
     Details details;
     FrameLayout detailLayout;
     boolean first = false;
-    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+    FragmentTransaction ft = getSupportFragmentManager().beginTransaction(),ft2 = getSupportFragmentManager().beginTransaction();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity implements connection {
         details = new Details();
     // Replace the contents of the container with the new fragment
         ft.replace(R.id.movie_list, new MainList());
+        ft2.replace(R.id.movie_detail,details);
+        ft2.commit();
     // or ft.add(R.id.your_placeholder, new FooFragment());
     // Complete the changes added above
         ft.commit();
@@ -33,9 +35,7 @@ public class MainActivity extends AppCompatActivity implements connection {
     private void show(){
         if(!first)
         {
-            FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
-            ft2.replace(R.id.movie_detail,new Details());
-            ft2.commit();
+            detailLayout.animate().yBy(-2000).setDuration(200).start();
             first = true;
         }
     }
@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements connection {
     @Override
     public void onBackPressed() {
         first = false;
-        ft.hide(new Details());
-        ft.commit();
+        detailLayout.animate().yBy(2000).setDuration(200).start();
     }
 }
