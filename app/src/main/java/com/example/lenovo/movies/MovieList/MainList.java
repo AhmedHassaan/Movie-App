@@ -11,10 +11,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.lenovo.movies.Data.Movies;
+import com.example.lenovo.movies.Data.connection;
 import com.example.lenovo.movies.R;
 
 import org.json.JSONArray;
@@ -40,6 +42,7 @@ public class MainList extends Fragment {
     ArrayList<Movies> moviesList;
     Context context = getActivity();
     private ProgressDialog dialog;
+    connection con;
 
     @Nullable
     @Override
@@ -48,10 +51,20 @@ public class MainList extends Fragment {
         list = (ListView)root.findViewById(R.id.movieList);
         moviesList = new ArrayList<>();
         new MoviesAsyncTask().execute();
+        con = (connection) getActivity();
 
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                con.set(moviesList.get(i));
+            }
+        });
 
         return root;
     }
+
+
 
 
     public class MoviesAsyncTask extends AsyncTask<Void , Void , Boolean>{
@@ -134,7 +147,7 @@ public class MainList extends Fragment {
                     return false;
                 }
                 movieJson = buffer.toString();
-                Log.v(LOG_TAG, "Forecast JSON String: " + movieJson);
+                Log.v(LOG_TAG, "Movie JSON String: " + movieJson);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (ProtocolException e) {

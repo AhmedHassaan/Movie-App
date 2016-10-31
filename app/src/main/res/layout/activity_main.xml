@@ -8,9 +8,15 @@
 
 
     <FrameLayout
-        android:id="@+id/your_placeholder"
+        android:id="@+id/movie_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/movie_detail">
     </FrameLayout>
 
 
