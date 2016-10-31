@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">Movies</string>
+
+
+    <string-array name="pref_units_values">
+        <item>vote_average.desc</item>
+        <item>popularity.desc</item>
+    </string-array>
+
+    <string-array name="pref_units_options">
+        <item>Vote Average</item>
+        <item>Popularity</item>
+    </string-array>
+
+    <string name="default_val">popularity.desc</string>
+
+    <string name="title_def">Popularity</string>
+
+    <string name="key">Sort</string>
+
 </resources>

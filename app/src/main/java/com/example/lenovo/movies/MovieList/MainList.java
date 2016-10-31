@@ -2,9 +2,11 @@ package com.example.lenovo.movies.MovieList;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -50,7 +52,7 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
         View root = inflater.inflate(R.layout.mainlist_fragment,container,false);
         list = (ListView)root.findViewById(R.id.movieList);
         moviesList = new ArrayList<>();
-        new MoviesAsyncTask().execute();
+        update();
         con = (connection) getActivity();
         list.setOnItemClickListener(this);
         return root;
@@ -61,8 +63,15 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
         con.set(moviesList.get(i));
     }
 
+    public void update(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String sort = prefs.getString(getString(R.string.key),getString(R.string.default_val));
+        new MoviesAsyncTask().execute(sort);
+        Toast.makeText(getActivity(),"Refresh",Toast.LENGTH_LONG).show();
+    }
 
-    public class MoviesAsyncTask extends AsyncTask<Void , Void , Boolean>{
+
+    public class MoviesAsyncTask extends AsyncTask<String , Void , Boolean>{
 
         String appKey = "4a09ef88946390c1359f633a7987bf5f";
         String movieJson;
@@ -72,6 +81,8 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            dialog = ProgressDialog.show(getActivity(), "",
+                    "Loading..", true);
         }
 
 
@@ -107,12 +118,14 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
         }
 
         @Override
-        protected Boolean doInBackground(Void... strings) {
+        protected Boolean doInBackground(String... strings) {
 
             final String baseURL = "http://api.themoviedb.org/3/discover/movie?";
             final String api_key = "api_key";
+            final String sort = "sort_by";
 
             Uri built = Uri.parse(baseURL).buildUpon()
+                    .appendQueryParameter(sort,strings[0])
                     .appendQueryParameter(api_key,appKey).build();
 
             HttpURLConnection urlConnection = null;
@@ -174,6 +187,7 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
+            dialog.dismiss();
             if(aBoolean){
                 MoviesAdapter adapter = new MoviesAdapter(getActivity(),R.layout.listitem,moviesList);
                 list.setAdapter(adapter);
