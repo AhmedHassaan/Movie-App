@@ -16,15 +16,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.example.lenovo.movies.Data.Movies;
 import com.example.lenovo.movies.Data.connection;
 import com.example.lenovo.movies.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,6 +42,7 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
     Context context = getActivity();
     private ProgressDialog dialog;
     connection con;
+    MoviesAdapter adapter;
 
     @Nullable
     @Override
@@ -73,6 +71,7 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
 
     public class MoviesAsyncTask extends AsyncTask<String , Void , Boolean>{
 
+
         String appKey = "4a09ef88946390c1359f633a7987bf5f";
         String movieJson;
 
@@ -81,6 +80,7 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            moviesList.clear();
             dialog = ProgressDialog.show(getActivity(), "",
                     "Loading..", true);
         }
@@ -189,7 +189,7 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
             super.onPostExecute(aBoolean);
             dialog.dismiss();
             if(aBoolean){
-                MoviesAdapter adapter = new MoviesAdapter(getActivity(),R.layout.listitem,moviesList);
+                adapter = new MoviesAdapter(getActivity(),R.layout.listitem,moviesList);
                 list.setAdapter(adapter);
             }
             else
