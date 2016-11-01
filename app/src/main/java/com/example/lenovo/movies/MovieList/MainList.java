@@ -189,7 +189,8 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
             super.onPostExecute(aBoolean);
             dialog.dismiss();
             if(aBoolean){
-                adapter = new MoviesAdapter(getActivity(),R.layout.listitem,moviesList);
+                if(getActivity() != null)
+                    adapter = new MoviesAdapter(getActivity(),R.layout.listitem,moviesList);
                 list.setAdapter(adapter);
             }
             else
