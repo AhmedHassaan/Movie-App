@@ -16,12 +16,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import com.example.lenovo.movies.Data.Movies;
 import com.example.lenovo.movies.Data.connection;
 import com.example.lenovo.movies.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -69,6 +72,7 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
     }
 
 
+
     public class MoviesAsyncTask extends AsyncTask<String , Void , Boolean>{
 
 
@@ -97,6 +101,7 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
             final String desc = "overview";
             final String date = "release_date";
             final String rate = "vote_average";
+            final String id = "id";
             String baseImage = "https://image.tmdb.org/t/p/w600";
 
             JSONObject movieJson = new JSONObject(moviesStr);
@@ -110,7 +115,8 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
                 String oneDate = oneMovie.getString(date);
                 String back = baseImage + oneMovie.getString(backDrop);
                 int oneRate = oneMovie.getInt(rate);
-                Movies m = new Movies(oneImage,oneTitle,oneDate,oneDesc,back,oneRate);
+                int oneId = oneMovie.getInt(id);
+                Movies m = new Movies(oneImage,oneTitle,oneDate,oneDesc,back,oneRate, Integer.toString(oneId));
                 moviesList.add(m);
 //                Log.v(LOG_TAG, "Movie Data : Name : " + moviesList.get(i).getName() + "    Image : " + moviesList.get(i).getImage());
             }
@@ -124,7 +130,7 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
             final String api_key = "api_key";
             final String sort = "sort_by";
 
-            Uri built = Uri.parse(baseURL).buildUpon()
+            Uri builtMovie = Uri.parse(baseURL).buildUpon()
                     .appendQueryParameter(sort,strings[0])
                     .appendQueryParameter(api_key,appKey).build();
 
@@ -132,8 +138,8 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
             BufferedReader reader = null;
 
             try {
-                URL url = new URL(built.toString());
-                Log.v(LOG_TAG, "built uri " + built.toString());
+                URL url = new URL(builtMovie.toString());
+                Log.v(LOG_TAG, "built uri " + builtMovie.toString());
 
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -197,6 +203,9 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
                 Toast.makeText(getActivity(),"No Internet",Toast.LENGTH_LONG).show();
         }
     }
+
+
+
 
 
 }
