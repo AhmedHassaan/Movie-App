@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.lenovo.movies.Data.Movies;
+import com.example.lenovo.movies.Data.OfflineData;
 import com.example.lenovo.movies.Data.connection;
 import com.example.lenovo.movies.R;
 
@@ -46,6 +47,7 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
     private ProgressDialog dialog;
     connection con;
     MoviesAdapter adapter;
+    OfflineData save;
 
     @Nullable
     @Override
@@ -53,6 +55,7 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
         View root = inflater.inflate(R.layout.mainlist_fragment,container,false);
         list = (ListView)root.findViewById(R.id.movieList);
         moviesList = new ArrayList<>();
+        save = new OfflineData(getActivity());
         update();
         con = (connection) getActivity();
         list.setOnItemClickListener(this);
@@ -195,12 +198,27 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
             super.onPostExecute(aBoolean);
             dialog.dismiss();
             if(aBoolean){
+                save.setJson(movieJson);
                 if(getActivity() != null)
                     adapter = new MoviesAdapter(getActivity(),R.layout.listitem,moviesList);
                 list.setAdapter(adapter);
             }
-            else
+            else{
                 Toast.makeText(getActivity(),"No Internet",Toast.LENGTH_LONG).show();
+                boolean b =true;
+                try {
+                    b = getData(save.getJson());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if(b){
+                    if(getActivity() != null)
+                        adapter = new MoviesAdapter(getActivity(),R.layout.listitem,moviesList);
+                    list.setAdapter(adapter);
+                }
+                else
+                    Toast.makeText(getActivity(),"No Data",Toast.LENGTH_LONG).show();
+            }
         }
     }
 
