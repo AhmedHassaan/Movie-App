@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity implements connection {
     Details details;
     MainList mainList;
     FrameLayout detailLayout;
-    boolean first = false;
+    boolean up = false;
     FragmentTransaction ft = getSupportFragmentManager().beginTransaction(),
             ft2 = getSupportFragmentManager().beginTransaction();
     @Override
@@ -27,7 +27,10 @@ public class MainActivity extends AppCompatActivity implements connection {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         detailLayout = (FrameLayout)findViewById(R.id.movie_detail);
-        detailLayout.setY(2000);
+        if(savedInstanceState!=null)
+            up = savedInstanceState.getBoolean("first");
+        if(!up)
+            detailLayout.setY(2000);
         details = new Details();
         mainList = new MainList();
     // Replace the contents of the container with the new fragment
@@ -65,10 +68,10 @@ public class MainActivity extends AppCompatActivity implements connection {
     }
 
     private void show(){
-        if(!first)
+        if(!up)
         {
             detailLayout.animate().yBy(-2000).setDuration(200).start();
-            first = true;
+            up = true;
         }
     }
 
@@ -80,10 +83,16 @@ public class MainActivity extends AppCompatActivity implements connection {
 
     @Override
     public void onBackPressed() {
-        if(!first){
+        if(!up){
             finish();
         }
-        first = false;
+        up = false;
         detailLayout.animate().yBy(2000).setDuration(200).start();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("first",up);
     }
 }

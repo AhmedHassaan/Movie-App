@@ -55,22 +55,23 @@ public class Details extends Fragment {
             public void onClick(View view) {
                 if(movie.getVideoURL()==null) {
                     new VideoAsyncTask().execute(movie.getId());
-                    Toast.makeText(getActivity(), movie.getVideoURL(), Toast.LENGTH_LONG).show();
+                    if(getActivity()!=null)
+                        Toast.makeText(getActivity(), movie.getVideoURL(), Toast.LENGTH_LONG).show();
                 }
             }
         });
 
-//        if(savedInstanceState != null){
-//            movie = new Movies(savedInstanceState.getString("image"),
-//                    savedInstanceState.getString("name"),
-//                    savedInstanceState.getString("date"),
-//                    savedInstanceState.getString("overview"),
-//                    savedInstanceState.getString("back"),
-//                    savedInstanceState.getInt("rate"),
-//                    savedInstanceState.getString("id"));
-//            movie.setVideoURL(savedInstanceState.getString("video"));
-//            update();
-//        }
+        if(savedInstanceState != null){
+            movie = new Movies(savedInstanceState.getString("image"),
+                    savedInstanceState.getString("name"),
+                    savedInstanceState.getString("date"),
+                    savedInstanceState.getString("overview"),
+                    savedInstanceState.getString("back"),
+                    savedInstanceState.getInt("rate"),
+                    savedInstanceState.getString("id"));
+            movie.setVideoURL(savedInstanceState.getString("video"));
+            update();
+        }
 
         return root;
     }
@@ -220,20 +221,21 @@ public class Details extends Fragment {
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             if(!aBoolean)
+                if(getActivity()!=null)
                 Toast.makeText(getActivity(),"No Internet",Toast.LENGTH_SHORT).show();
         }
     }
-//
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        outState.putString("name",movie.getName());
-//        outState.putString("overview",movie.getOverview());
-//        outState.putString("id",movie.getId());
-//        outState.putString("back",movie.getBackdrop());
-//        outState.putString("date",movie.getDate());
-//        outState.putString("image",movie.getImage());
-//        outState.putString("video",movie.getVideoURL());
-//        outState.putInt("rate",movie.getRate());
-//    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("name",movie.getName());
+        outState.putString("overview",movie.getOverview());
+        outState.putString("id",movie.getId());
+        outState.putString("back",movie.getBackdrop());
+        outState.putString("date",movie.getDate());
+        outState.putString("image",movie.getImage());
+        outState.putString("video",movie.getVideoURL());
+        outState.putInt("rate",movie.getRate());
+    }
 }
