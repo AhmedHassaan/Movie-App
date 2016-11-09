@@ -69,8 +69,6 @@ public class Details extends Fragment {
 //                    savedInstanceState.getInt("rate"),
 //                    savedInstanceState.getString("id"));
 //            movie.setVideoURL(savedInstanceState.getString("video"));
-//
-//            Toast.makeText(getActivity(),savedInstanceState.getShort("image"),Toast.LENGTH_SHORT).show();
 //            update();
 //        }
 
@@ -225,17 +223,17 @@ public class Details extends Fragment {
                 Toast.makeText(getActivity(),"No Internet",Toast.LENGTH_SHORT).show();
         }
     }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("name",movie.getName());
-        outState.putString("overview",movie.getOverview());
-        outState.putString("id",movie.getId());
-        outState.putString("back",movie.getBackdrop());
-        outState.putString("date",movie.getDate());
-        outState.putString("image",movie.getImage());
-        outState.putString("video",movie.getVideoURL());
-        outState.putInt("rate",movie.getRate());
-    }
+//
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        outState.putString("name",movie.getName());
+//        outState.putString("overview",movie.getOverview());
+//        outState.putString("id",movie.getId());
+//        outState.putString("back",movie.getBackdrop());
+//        outState.putString("date",movie.getDate());
+//        outState.putString("image",movie.getImage());
+//        outState.putString("video",movie.getVideoURL());
+//        outState.putInt("rate",movie.getRate());
+//    }
 }

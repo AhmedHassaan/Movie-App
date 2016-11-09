@@ -204,7 +204,8 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
                 list.setAdapter(adapter);
             }
             else{
-                Toast.makeText(getActivity(),"No Internet",Toast.LENGTH_LONG).show();
+                if(getActivity() != null)
+                    Toast.makeText(getActivity(),"No Internet",Toast.LENGTH_LONG).show();
                 boolean b =true;
                 try {
                     b = getData(save.getJson());
