@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.example.lenovo.movies.Data.Details;
 import com.example.lenovo.movies.Data.Movies;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements connection {
     Details details;
     MainList mainList;
     FrameLayout detailLayout;
+    Movies movie;
     boolean up = false;
     FragmentTransaction ft = getSupportFragmentManager().beginTransaction(),
             ft2 = getSupportFragmentManager().beginTransaction();
@@ -27,8 +29,9 @@ public class MainActivity extends AppCompatActivity implements connection {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         detailLayout = (FrameLayout)findViewById(R.id.movie_detail);
-        if(savedInstanceState!=null)
+        if(savedInstanceState!=null) {
             up = savedInstanceState.getBoolean("first");
+        }
         if(!up)
             detailLayout.setY(2000);
         details = new Details();
@@ -41,7 +44,19 @@ public class MainActivity extends AppCompatActivity implements connection {
     // Complete the changes added above
         ft.commit();
         //setHasOptionsMenu(true);
-
+        if(savedInstanceState!=null) {
+            if (savedInstanceState.containsKey("name")) {
+                movie = new Movies(savedInstanceState.getString("image"),
+                        savedInstanceState.getString("name"),
+                        savedInstanceState.getString("date"),
+                        savedInstanceState.getString("overview"),
+                        savedInstanceState.getString("back"),
+                        savedInstanceState.getInt("rate"),
+                        savedInstanceState.getString("id"));
+                movie.setVideoURL(savedInstanceState.getString("video"));
+                setSave();
+            }
+        }
     }
 
     @Override
@@ -77,8 +92,14 @@ public class MainActivity extends AppCompatActivity implements connection {
 
     @Override
     public void set(Movies movies) {
+        this.movie=movies;
         show();
-        details.setNew(movies);
+        details.setNew(movies,false);
+    }
+
+    public void setSave(){
+        Toast.makeText(getApplicationContext(),"Save",Toast.LENGTH_SHORT).show();
+        details.setNew(movie,true);
     }
 
     @Override
@@ -94,5 +115,15 @@ public class MainActivity extends AppCompatActivity implements connection {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean("first",up);
+        if(up) {
+            outState.putString("name", movie.getName());
+            outState.putString("overview", movie.getOverview());
+            outState.putString("id", movie.getId());
+            outState.putString("back", movie.getBackdrop());
+            outState.putString("date", movie.getDate());
+            outState.putString("image", movie.getImage());
+            outState.putString("video", movie.getVideoURL());
+            outState.putInt("rate", movie.getRate());
+        }
     }
 }

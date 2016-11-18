@@ -38,7 +38,7 @@ public class Details extends Fragment {
     Movies movie;
     ImageView movieImage;
     TextView title,rate,date,desc;
-
+    boolean f = false;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,25 +61,30 @@ public class Details extends Fragment {
             }
         });
 
-        if(savedInstanceState != null){
-            movie = new Movies(savedInstanceState.getString("image"),
-                    savedInstanceState.getString("name"),
-                    savedInstanceState.getString("date"),
-                    savedInstanceState.getString("overview"),
-                    savedInstanceState.getString("back"),
-                    savedInstanceState.getInt("rate"),
-                    savedInstanceState.getString("id"));
-            movie.setVideoURL(savedInstanceState.getString("video"));
-            update();
-        }
+//        if(savedInstanceState != null){
+//            movie = new Movies(savedInstanceState.getString("image"),
+//                    savedInstanceState.getString("name"),
+//                    savedInstanceState.getString("date"),
+//                    savedInstanceState.getString("overview"),
+//                    savedInstanceState.getString("back"),
+//                    savedInstanceState.getInt("rate"),
+//                    savedInstanceState.getString("id"));
+//            movie.setVideoURL(savedInstanceState.getString("video"));
+//            update();
+//        }
 
+        setRetainInstance(true);
+        if(f)
+            update();
         return root;
     }
 
-    public void setNew(Movies movie){
-        this.movie=movie;
-        update();
-
+    public void setNew(Movies movie,boolean g){
+        this.movie = movie;
+        f = g;
+        if(getActivity()!=null) {
+            update();
+        }
     }
 
     public void update(){
@@ -226,16 +231,39 @@ public class Details extends Fragment {
         }
     }
 
+
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("name",movie.getName());
-        outState.putString("overview",movie.getOverview());
-        outState.putString("id",movie.getId());
-        outState.putString("back",movie.getBackdrop());
-        outState.putString("date",movie.getDate());
-        outState.putString("image",movie.getImage());
-        outState.putString("video",movie.getVideoURL());
-        outState.putInt("rate",movie.getRate());
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+        // Retain this Fragment so that it will not be destroyed when an orientation
+        // change happens and we can keep our AsyncTask running
     }
+
+
+
+//    public void onConfigurationChanged(Configuration newConfig)
+//    {
+//        super.onConfigurationChanged(newConfig);
+//
+//        update();
+//    }
+
+
+
+
+
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        outState.putString("name",movie.getName());
+//        outState.putString("overview",movie.getOverview());
+//        outState.putString("id",movie.getId());
+//        outState.putString("back",movie.getBackdrop());
+//        outState.putString("date",movie.getDate());
+//        outState.putString("image",movie.getImage());
+//        outState.putString("video",movie.getVideoURL());
+//        outState.putInt("rate",movie.getRate());
+//    }
 }
