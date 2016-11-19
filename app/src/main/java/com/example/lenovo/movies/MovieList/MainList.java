@@ -105,7 +105,8 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
             final String date = "release_date";
             final String rate = "vote_average";
             final String id = "id";
-            String baseImage = "https://image.tmdb.org/t/p/w600";
+            String baseImageNormal = "https://image.tmdb.org/t/p/w300";
+            String baseImageBig = "https://image.tmdb.org/t/p/w600";
 
             JSONObject movieJson = new JSONObject(moviesStr);
             JSONArray moviesArray = movieJson.getJSONArray(result);
@@ -113,10 +114,10 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
             for(int i=0;i<moviesArray.length();i++){
                 JSONObject oneMovie = moviesArray.getJSONObject(i);
                 String oneTitle = oneMovie.getString(title);
-                String oneImage = baseImage + oneMovie.getString(image);
+                String oneImage = baseImageNormal + oneMovie.getString(image);
                 String oneDesc = oneMovie.getString(desc);
                 String oneDate = oneMovie.getString(date);
-                String back = baseImage + oneMovie.getString(backDrop);
+                String back = baseImageBig + oneMovie.getString(backDrop);
                 int oneRate = oneMovie.getInt(rate);
                 int oneId = oneMovie.getInt(id);
                 Movies m = new Movies(oneImage,oneTitle,oneDate,oneDesc,back,oneRate, Integer.toString(oneId));
@@ -129,14 +130,21 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
         @Override
         protected Boolean doInBackground(String... strings) {
 
-            final String baseURL = "http://api.themoviedb.org/3/discover/movie?";
+            String s = "now_playing";
+            Uri builtMovie;
+            String baseURL = "http://api.themoviedb.org/3/discover/movie?";
             final String api_key = "api_key";
             final String sort = "sort_by";
-
-            Uri builtMovie = Uri.parse(baseURL).buildUpon()
-                    .appendQueryParameter(sort,strings[0])
-                    .appendQueryParameter(api_key,appKey).build();
-
+            if(strings[0].equals(s)) {
+                baseURL = "http://api.themoviedb.org/3/movie/now_playing?";
+                builtMovie = Uri.parse(baseURL).buildUpon()
+                        .appendQueryParameter(api_key, appKey).build();
+            }
+            else {
+                builtMovie = Uri.parse(baseURL).buildUpon()
+                        .appendQueryParameter(sort, strings[0])
+                        .appendQueryParameter(api_key, appKey).build();
+            }
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
 

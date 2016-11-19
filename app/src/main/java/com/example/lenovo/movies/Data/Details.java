@@ -77,10 +77,10 @@ public class Details extends Fragment {
     }
 
     public void update(){
-            title.setText("Title : " + movie.getName());
-            desc.setText("Overview : " + movie.getOverview());
-            rate.setText("Rate : " + movie.getRate());
-            date.setText("Date : " + movie.getDate());
+            title.setText(movie.getName());
+            desc.setText(movie.getOverview());
+            rate.setText(Integer.toString(movie.getRate()));
+            date.setText(movie.getDate());
             Picasso.with(getActivity()).load(movie.getBackdrop()).placeholder(R.mipmap.ic_launcher).into(movieImage);
             String video = movie.getVideoURL();
             if (video == null)

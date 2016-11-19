@@ -12,7 +12,10 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -40,9 +43,10 @@
                     android:text="Title : "
                     android:textSize="30sp"
                     android:id="@+id/detail_title"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="20dp"
                     android:textColor="@color/colorPrimary"
-                    android:layout_below="@+id/detailImage"
+                    android:layout_below="@+id/detail_rate"
+                    android:layout_centerInParent="true"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"/>
 
@@ -53,6 +57,7 @@
                     android:textSize="25sp"
                     android:id="@+id/detail_desc"
                     android:layout_marginTop="20dp"
+                    android:layout_centerInParent="true"
                     android:textColor="@color/colorPrimary"
                     android:layout_below="@+id/detail_title"
                     android:layout_marginLeft="10dp"
@@ -67,7 +72,9 @@
                     android:layout_marginTop="20dp"
                     android:textColor="@color/colorPrimary"
                     android:layout_below="@+id/detail_desc"
+                    android:layout_centerInParent="true"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="30dp"
                     android:layout_marginRight="10dp"/>
 
                 <TextView
@@ -76,15 +83,21 @@
                     android:text="Rate : "
                     android:id="@+id/detail_rate"
                     android:textSize="25sp"
-                    android:layout_marginTop="20dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="5dp"
                     android:textColor="@color/colorPrimary"
-                    android:layout_below="@+id/detail_date"
+                    android:layout_below="@+id/star"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginBottom="30dp"
                     android:layout_marginRight="10dp"/>
 
-
-
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/star"
+                    android:src="@drawable/starfull"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/detailImage"
+                    android:layout_centerHorizontal="true" />
 
 
             </RelativeLayout>
@@ -92,8 +105,6 @@
         </ScrollView>
 
     </FrameLayout>
-
-
 
 
 </RelativeLayout>
