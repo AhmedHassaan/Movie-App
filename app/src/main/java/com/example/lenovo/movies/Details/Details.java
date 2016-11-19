@@ -1,4 +1,4 @@
-package com.example.lenovo.movies.Data;
+package com.example.lenovo.movies.Details;
 
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -7,12 +7,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.lenovo.movies.Data.Movies;
 import com.example.lenovo.movies.R;
 import com.squareup.picasso.Picasso;
 
@@ -39,6 +42,9 @@ public class Details extends Fragment {
     ImageView movieImage;
     TextView title,rate,date,desc;
     boolean f = false;
+    ListView trailer;
+    ArrayAdapter<String> s;
+    String a[] = {"No Internet Connection"};
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -49,15 +55,16 @@ public class Details extends Fragment {
         rate = (TextView)root.findViewById(R.id.detail_rate);
         date = (TextView)root.findViewById(R.id.detail_date);
         desc = (TextView)root.findViewById(R.id.detail_desc);
-
-        movieImage.setOnClickListener(new View.OnClickListener() {
+        trailer = (ListView) root.findViewById(R.id.trailers);
+        s = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, a);
+        trailer.setAdapter(s);
+        trailer.setOnTouchListener(new View.OnTouchListener() {
+            // Setting on Touch Listener for handling the touch inside ScrollView
             @Override
-            public void onClick(View view) {
-                if(movie.getVideoURL()==null) {
-                    new VideoAsyncTask().execute(movie.getId());
-                    if(getActivity()!=null)
-                        Toast.makeText(getActivity(), movie.getVideoURL(), Toast.LENGTH_LONG).show();
-                }
+            public boolean onTouch(View v, MotionEvent event) {
+                // Disallow the touch request for parent scroll on touch of child view
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
             }
         });
 
@@ -82,9 +89,7 @@ public class Details extends Fragment {
             rate.setText(Integer.toString(movie.getRate()));
             date.setText(movie.getDate());
             Picasso.with(getActivity()).load(movie.getBackdrop()).placeholder(R.mipmap.ic_launcher).into(movieImage);
-            String video = movie.getVideoURL();
-            if (video == null)
-                new VideoAsyncTask().execute(movie.getId());
+            new VideoAsyncTask().execute(movie.getId());
     }
 
 
@@ -93,6 +98,12 @@ public class Details extends Fragment {
         String appKey = "4a09ef88946390c1359f633a7987bf5f";
         String appLang = "en-US";
         String videoJson;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            movie.clear();
+        }
 
         @Override
         protected Boolean doInBackground(String... strings) {
@@ -170,15 +181,7 @@ public class Details extends Fragment {
             if(videoStr==null)
                 return false;
             final String key = "key";
-            final String type = "type";
-            final String site = "site";
             final String result = "results";
-            final String needed_type = "Trailer";
-            final String needed_site = "YouTube";
-            final String teaser_type = "Teaser";
-            boolean found = false;
-            boolean teaser = false;
-            String teaserVideo = null;
             String baseVideoUrl = "https://www.youtube.com/watch?v=";
 
             JSONObject videoJson = new JSONObject(videoStr);
@@ -186,37 +189,25 @@ public class Details extends Fragment {
 
             for(int i=0;i<videosArray.length();i++){
                 JSONObject oneVideo = videosArray.getJSONObject(i);
-                String temp_type = oneVideo.getString(type);
-                String temp_site = oneVideo.getString(site);
-                if(temp_site.equals(needed_site)){
-                    if(temp_type.equals(needed_type)){
-                        movie.setVideoURL(baseVideoUrl + oneVideo.getString(key));
-                        found = true;
-                        teaser = false;
-                        break;
-                    }
-                    else if(temp_type.equals(teaser_type)){
-                        teaser = true;
-                        teaserVideo = baseVideoUrl + oneVideo.getString(key);
-                    }
-                }
-
-            }
-            if(teaser){
-                movie.setVideoURL(teaserVideo);
-            }
-            if(!found) {
-                movie.setVideoURL("No Video Available.");
-                return false;
+                movie.putTrailer(baseVideoUrl + oneVideo.getString(key));
             }
             return true;
         }
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
-            if(!aBoolean)
-                if(getActivity()!=null)
-                Toast.makeText(getActivity(),"No Internet",Toast.LENGTH_SHORT).show();
+            if(aBoolean) {
+                if (getActivity() != null) {
+                    s = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, movie.trailers);
+                    trailer.setAdapter(s);
+                }
+            }
+            else{
+                if (getActivity() != null) {
+                    s = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, a);
+                    trailer.setAdapter(s);
+                }
+            }
         }
     }
 

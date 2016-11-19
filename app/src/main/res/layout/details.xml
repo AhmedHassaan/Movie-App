@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/details"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -44,7 +45,7 @@
                     android:textSize="30sp"
                     android:id="@+id/detail_title"
                     android:layout_marginTop="20dp"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/black"
                     android:layout_below="@+id/detail_rate"
                     android:layout_centerInParent="true"
                     android:layout_marginLeft="10dp"
@@ -58,7 +59,7 @@
                     android:id="@+id/detail_desc"
                     android:layout_marginTop="20dp"
                     android:layout_centerInParent="true"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/black"
                     android:layout_below="@+id/detail_title"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"/>
@@ -70,7 +71,7 @@
                     android:textSize="25sp"
                     android:id="@+id/detail_date"
                     android:layout_marginTop="20dp"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/black"
                     android:layout_below="@+id/detail_desc"
                     android:layout_centerInParent="true"
                     android:layout_marginLeft="10dp"
@@ -85,7 +86,7 @@
                     android:textSize="25sp"
                     android:layout_centerInParent="true"
                     android:layout_marginTop="5dp"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/black"
                     android:layout_below="@+id/star"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"/>
@@ -98,6 +99,18 @@
                     android:layout_marginTop="10dp"
                     android:layout_below="@+id/detailImage"
                     android:layout_centerHorizontal="true" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:layout_below="@id/detail_date">
+
+                    <ListView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/trailers"/>
+
+                </FrameLayout>
 
 
             </RelativeLayout>

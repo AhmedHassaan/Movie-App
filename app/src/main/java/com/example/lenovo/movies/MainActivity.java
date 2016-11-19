@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.example.lenovo.movies.Data.Details;
+import com.example.lenovo.movies.Details.Details;
 import com.example.lenovo.movies.Data.Movies;
 import com.example.lenovo.movies.Data.Setting;
 import com.example.lenovo.movies.Data.connection;
@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements connection {
                         savedInstanceState.getString("back"),
                         savedInstanceState.getInt("rate"),
                         savedInstanceState.getString("id"));
-                movie.setVideoURL(savedInstanceState.getString("video"));
                 setSave();
             }
         }
@@ -122,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements connection {
             outState.putString("back", movie.getBackdrop());
             outState.putString("date", movie.getDate());
             outState.putString("image", movie.getImage());
-            outState.putString("video", movie.getVideoURL());
             outState.putInt("rate", movie.getRate());
         }
     }

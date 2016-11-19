@@ -1,7 +1,6 @@
 package com.example.lenovo.movies.MovieList;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -35,6 +34,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by Lenovo on 10/21/2016.
@@ -43,12 +43,10 @@ import java.util.ArrayList;
 public class MainList extends Fragment implements AdapterView.OnItemClickListener {
     ListView list;
     ArrayList<Movies> moviesList;
-    Context context = getActivity();
     private ProgressDialog dialog;
     connection con;
     MoviesAdapter adapter;
     OfflineData save;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -69,11 +67,21 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
 
     public void update(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String sort = prefs.getString(getString(R.string.key_view),getString(R.string.default_val));
-        new MoviesAsyncTask().execute(sort);
-        Toast.makeText(getActivity(),"Refresh",Toast.LENGTH_LONG).show();
+        String view = prefs.getString(getString(R.string.key_view),getString(R.string.view_default_val));
+        new MoviesAsyncTask().execute(view);
     }
 
+
+    public void sortMovies(){
+        if (getActivity() != null) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String sort = prefs.getString(getString(R.string.key_sort), getString(R.string.sort_default_val));
+            if (sort.equals("rate"))
+                Collections.sort(moviesList, Movies.rateComparator);
+            else
+                Collections.sort(moviesList, Movies.nameComparator);
+        }
+    }
 
 
     public class MoviesAsyncTask extends AsyncTask<String , Void , Boolean>{
@@ -107,7 +115,7 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
             final String rate = "vote_average";
             final String id = "id";
             String baseImageNormal = "https://image.tmdb.org/t/p/w300";
-            String baseImageBig = "https://image.tmdb.org/t/p/w600";
+            String baseImageBig = "https://image.tmdb.org/t/p/w300";
 
             JSONObject movieJson = new JSONObject(moviesStr);
             JSONArray moviesArray = movieJson.getJSONArray(result);
@@ -200,6 +208,7 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
             dialog.dismiss();
             if(aBoolean){
                 save.setJson(movieJson);
+                sortMovies();
                 if(getActivity() != null)
                     adapter = new MoviesAdapter(getActivity(),R.layout.listitem,moviesList);
                 list.setAdapter(adapter);
@@ -214,6 +223,7 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
                     e.printStackTrace();
                 }
                 if(b){
+                    sortMovies();
                     if(getActivity() != null)
                         adapter = new MoviesAdapter(getActivity(),R.layout.listitem,moviesList);
                     list.setAdapter(adapter);

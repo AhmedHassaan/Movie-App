@@ -1,25 +1,44 @@
 <resources>
     <string name="app_name">Movies</string>
 
-
-    <string-array name="pref_units_values">
+    //-----------for View
+    <string-array name="pref_view_values">
         <item>upcoming</item>
         <item>now_playing</item>
         <item>top_rated</item>
         <item>popular</item>
     </string-array>
 
-    <string-array name="pref_units_options">
+    <string-array name="pref_view_options">
         <item>Upcoming</item>
         <item>Now Playing</item>
         <item>Top Rated</item>
         <item>Popular</item>
     </string-array>
 
-    <string name="default_val">upcoming</string>
+    <string name="view_default_val">upcoming</string>
 
-    <string name="title_def">View</string>
+    <string name="view_title_def">View</string>
 
     <string name="key_view">View</string>
+
+    //------------ for Sort
+    <string-array name="pref_sort_values">
+        <item>name</item>
+        <item>rate</item>
+    </string-array>
+
+    <string-array name="pref_sort_options">
+        <item>Name</item>
+        <item>Rate</item>
+    </string-array>
+
+    <string name="sort_default_val">name</string>
+
+    <string name="sort_title_def">Sort</string>
+
+    <string name="key_sort">Sort</string>
+
+
 
 </resources>
