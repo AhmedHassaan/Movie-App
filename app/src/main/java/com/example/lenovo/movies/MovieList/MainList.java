@@ -69,7 +69,7 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
 
     public void update(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String sort = prefs.getString(getString(R.string.key),getString(R.string.default_val));
+        String sort = prefs.getString(getString(R.string.key_view),getString(R.string.default_val));
         new MoviesAsyncTask().execute(sort);
         Toast.makeText(getActivity(),"Refresh",Toast.LENGTH_LONG).show();
     }
@@ -80,6 +80,7 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
 
 
         String appKey = "4a09ef88946390c1359f633a7987bf5f";
+        String en = "en-US";
         String movieJson;
 
         private final String LOG_TAG = MoviesAsyncTask.class.getSimpleName();
@@ -129,22 +130,14 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
 
         @Override
         protected Boolean doInBackground(String... strings) {
-
-            String s = "now_playing";
             Uri builtMovie;
-            String baseURL = "http://api.themoviedb.org/3/discover/movie?";
+            String baseURL = "http://api.themoviedb.org/3/movie/" + strings[0] + "?";
             final String api_key = "api_key";
-            final String sort = "sort_by";
-            if(strings[0].equals(s)) {
-                baseURL = "http://api.themoviedb.org/3/movie/now_playing?";
-                builtMovie = Uri.parse(baseURL).buildUpon()
-                        .appendQueryParameter(api_key, appKey).build();
-            }
-            else {
-                builtMovie = Uri.parse(baseURL).buildUpon()
-                        .appendQueryParameter(sort, strings[0])
-                        .appendQueryParameter(api_key, appKey).build();
-            }
+            final String lang = "language";
+            builtMovie = Uri.parse(baseURL).buildUpon()
+                    .appendQueryParameter(lang,en)
+                    .appendQueryParameter(api_key, appKey).build();
+
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
 

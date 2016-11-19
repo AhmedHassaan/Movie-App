@@ -3,7 +3,7 @@
 
     <ListPreference
         android:title="@string/title_def"
-        android:key="@string/key"
+        android:key="@string/key_view"
         android:defaultValue="@string/default_val"
         android:entryValues="@array/pref_units_values"
         android:entries="@array/pref_units_options"/>

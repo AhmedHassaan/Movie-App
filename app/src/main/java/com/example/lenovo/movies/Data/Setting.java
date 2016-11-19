@@ -36,7 +36,7 @@ public class Setting extends PreferenceActivity
         getDelegate().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref_general);
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.key_view)));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }

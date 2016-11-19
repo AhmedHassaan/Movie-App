@@ -3,21 +3,23 @@
 
 
     <string-array name="pref_units_values">
+        <item>upcoming</item>
         <item>now_playing</item>
-        <item>vote_average.desc</item>
-        <item>popularity.desc</item>
+        <item>top_rated</item>
+        <item>popular</item>
     </string-array>
 
     <string-array name="pref_units_options">
+        <item>Upcoming</item>
         <item>Now Playing</item>
-        <item>Vote Average</item>
-        <item>Popularity</item>
+        <item>Top Rated</item>
+        <item>Popular</item>
     </string-array>
 
-    <string name="default_val">popularity.desc</string>
+    <string name="default_val">upcoming</string>
 
-    <string name="title_def">Popularity</string>
+    <string name="title_def">View</string>
 
-    <string name="key">Sort</string>
+    <string name="key_view">View</string>
 
 </resources>
