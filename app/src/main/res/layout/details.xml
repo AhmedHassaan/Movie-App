@@ -42,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Title : "
-                    android:textSize="30sp"
+                    android:textSize="20sp"
                     android:id="@+id/detail_title"
                     android:layout_marginTop="20dp"
                     android:textColor="@color/black"
@@ -55,7 +55,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Desc : "
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:id="@+id/detail_desc"
                     android:layout_marginTop="20dp"
                     android:layout_centerInParent="true"
@@ -68,7 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="date : "
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:id="@+id/detail_date"
                     android:layout_marginTop="20dp"
                     android:textColor="@color/black"
@@ -83,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:text="Rate : "
                     android:id="@+id/detail_rate"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:layout_centerInParent="true"
                     android:layout_marginTop="5dp"
                     android:textColor="@color/black"
@@ -100,15 +100,28 @@
                     android:layout_below="@+id/detailImage"
                     android:layout_centerHorizontal="true" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Trailers : "
+                    android:textColor="@color/black"
+                    android:id="@+id/text"
+                    android:textSize="20sp"
+                    android:layout_marginBottom="7dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_below="@id/detail_date" />
+
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="140dp"
-                    android:layout_below="@id/detail_date">
+                    android:layout_below="@id/text">
 
                     <ListView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/trailers"/>
+                        android:id="@+id/trailers"
+                        android:textAlignment="center"
+                        android:layout_marginBottom="20dp"/>
 
                 </FrameLayout>
 

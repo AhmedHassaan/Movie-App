@@ -1,5 +1,6 @@
 package com.example.lenovo.movies.Details;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -72,6 +74,21 @@ public class Details extends Fragment {
         setRetainInstance(true);
         if(f)
             update();
+
+        trailer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String click = movie.getTrailer(i);
+                if(!click.equals("No Internet Connection"))
+                {
+                    Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(click));
+                    intent.putExtra("force_fullscreen",true);
+                    startActivity(intent);
+                }
+            }
+        });
+
+
         return root;
     }
 
@@ -198,7 +215,10 @@ public class Details extends Fragment {
         protected void onPostExecute(Boolean aBoolean) {
             if(aBoolean) {
                 if (getActivity() != null) {
-                    s = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, movie.trailers);
+                    String hh[] = new String [movie.trailerNum()];
+                    for(int i=1;i<=movie.trailerNum();i++)
+                        hh[i-1]="Trailer "+ i;
+                    s = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, hh);
                     trailer.setAdapter(s);
                 }
             }
