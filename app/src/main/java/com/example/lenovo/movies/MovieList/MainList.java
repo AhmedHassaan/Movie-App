@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.lenovo.movies.Adapters.MoviesAdapter;
 import com.example.lenovo.movies.Data.Movies;
 import com.example.lenovo.movies.Data.OfflineData;
 import com.example.lenovo.movies.Data.connection;

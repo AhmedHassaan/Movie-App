@@ -1,4 +1,4 @@
-package com.example.lenovo.movies.MovieList;
+package com.example.lenovo.movies.Adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

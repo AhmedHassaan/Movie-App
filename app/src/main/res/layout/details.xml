@@ -114,6 +114,7 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="140dp"
+                    android:id="@+id/trailerFrame"
                     android:layout_below="@id/text">
 
                     <ListView
@@ -123,6 +124,30 @@
                         android:textAlignment="center"
                         android:layout_marginBottom="20dp"/>
 
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Previews : "
+                    android:textColor="@color/black"
+                    android:id="@+id/text2"
+                    android:textSize="20sp"
+                    android:layout_marginBottom="7dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_below="@+id/trailerFrame"/>
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="180dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_below="@+id/text2">
+
+                    <ExpandableListView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="vertical"
+                        android:id="@+id/previewList"/>
                 </FrameLayout>
 
 

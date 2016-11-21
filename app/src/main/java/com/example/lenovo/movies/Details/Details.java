@@ -13,10 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.lenovo.movies.Adapters.PreviewAdapter;
 import com.example.lenovo.movies.Data.Movies;
 import com.example.lenovo.movies.R;
 import com.squareup.picasso.Picasso;
@@ -45,8 +47,11 @@ public class Details extends Fragment {
     TextView title,rate,date,desc;
     boolean f = false;
     ListView trailer;
-    ArrayAdapter<String> s;
-    String a[] = {"No Internet Connection"};
+    ArrayAdapter<String> videoAdapter;
+    String noInterner[] = {"No Internet Connection"};
+    ExpandableListView expandableListView;
+    PreviewAdapter previewAdapter;
+    boolean booleanPreview=false,booleanTrailers=false;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,8 +63,9 @@ public class Details extends Fragment {
         date = (TextView)root.findViewById(R.id.detail_date);
         desc = (TextView)root.findViewById(R.id.detail_desc);
         trailer = (ListView) root.findViewById(R.id.trailers);
-        s = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, a);
-        trailer.setAdapter(s);
+        expandableListView = (ExpandableListView)root.findViewById(R.id.previewList);
+        videoAdapter = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, noInterner);
+        trailer.setAdapter(videoAdapter);
         trailer.setOnTouchListener(new View.OnTouchListener() {
             // Setting on Touch Listener for handling the touch inside ScrollView
             @Override
@@ -70,6 +76,15 @@ public class Details extends Fragment {
             }
         });
 
+
+        expandableListView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                view.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
 
         setRetainInstance(true);
         if(f)
@@ -114,7 +129,7 @@ public class Details extends Fragment {
         private final String LOG_TAG = VideoAsyncTask.class.getSimpleName();
         String appKey = "4a09ef88946390c1359f633a7987bf5f";
         String appLang = "en-US";
-        String videoJson;
+        String videoJson,previewJson;
 
         @Override
         protected void onPreExecute() {
@@ -125,41 +140,62 @@ public class Details extends Fragment {
         @Override
         protected Boolean doInBackground(String... strings) {
 
-            final String baseUrl = "https://api.themoviedb.org/3/movie/" + strings[0] + "/videos?";
+            final String baseUrlVideo = "https://api.themoviedb.org/3/movie/" + strings[0] + "/videos?";
+            final String baseUrlPreview = "https://api.themoviedb.org/3/movie/" + strings[0] + "/reviews?";
             final String api_key = "api_key";
             final String language = "language";
 
-            Uri built = Uri.parse(baseUrl).buildUpon().appendQueryParameter(api_key,appKey)
+            Uri builtVideo = Uri.parse(baseUrlVideo).buildUpon().appendQueryParameter(api_key,appKey)
+                    .appendQueryParameter(language,appLang).build();
+            Uri builtPreview = Uri.parse(baseUrlPreview).buildUpon().appendQueryParameter(api_key,appKey)
                     .appendQueryParameter(language,appLang).build();
 
-            HttpURLConnection urlConnection = null;
-            BufferedReader reader = null;
+            HttpURLConnection urlConnectionVideo = null;
+            BufferedReader readerVideo = null;
+            HttpURLConnection urlConnectionPreview = null;
+            BufferedReader readerPreview = null;
 
             try {
-                URL url = new URL(built.toString());
-                Log.v(LOG_TAG, "built uri " + built.toString());
+                URL urlVideo = new URL(builtVideo.toString());
+                Log.v(LOG_TAG, "built uri Video " + builtVideo.toString());
+                URL urlPreview = new URL(builtPreview.toString());
+                Log.v(LOG_TAG, "built uri Preview " + builtPreview.toString());
 
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.connect();
+                urlConnectionVideo = (HttpURLConnection) urlVideo.openConnection();
+                urlConnectionVideo.setRequestMethod("GET");
+                urlConnectionVideo.connect();
+                urlConnectionPreview = (HttpURLConnection) urlPreview.openConnection();
+                urlConnectionPreview.setRequestMethod("GET");
+                urlConnectionPreview.connect();
 
-                InputStream inputStream = urlConnection.getInputStream();
-                StringBuffer buffer = new StringBuffer();
-                if (inputStream == null) {
+                InputStream inputStreamVideo = urlConnectionVideo.getInputStream();
+                StringBuffer bufferVideo = new StringBuffer();
+                if (inputStreamVideo == null) {
                     return false;
                 }
-                reader = new BufferedReader(new InputStreamReader(inputStream));
+                readerVideo = new BufferedReader(new InputStreamReader(inputStreamVideo));
 
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    buffer.append(line + "\n");
+                String line1;
+                while ((line1 = readerVideo.readLine()) != null) {
+                    bufferVideo.append(line1 + "\n");
                 }
-                if (buffer.length() == 0) {
+
+                InputStream inputStreamPreview = urlConnectionPreview.getInputStream();
+                StringBuffer bufferPreview = new StringBuffer();
+                if (inputStreamPreview == null) {
                     return false;
                 }
+                readerPreview = new BufferedReader(new InputStreamReader(inputStreamPreview));
 
-                videoJson = buffer.toString();
+                String line2;
+                while ((line2 = readerPreview.readLine()) != null) {
+                    bufferPreview.append(line2 + "\n");
+                }
+
+                videoJson = bufferVideo.toString();
+                previewJson = bufferPreview.toString();
                 Log.v(LOG_TAG, "Video JSON String: " + videoJson);
+                Log.v(LOG_TAG, "Preview JSON String: " + previewJson);
 
 
 
@@ -170,12 +206,14 @@ public class Details extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }  finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
+                if (urlConnectionVideo != null &&urlConnectionPreview != null) {
+                    urlConnectionVideo.disconnect();
+                    urlConnectionPreview.disconnect();
                 }
-                if (reader != null) {
+                if (readerVideo != null && readerPreview!=null) {
                     try {
-                        reader.close();
+                        readerVideo.close();
+                        readerPreview.close();
                     } catch (final IOException e) {
 
                     }
@@ -184,7 +222,7 @@ public class Details extends Fragment {
 
 
             try {
-                return getData(videoJson);
+                return getData(videoJson,previewJson);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -194,19 +232,43 @@ public class Details extends Fragment {
         }
 
 
-        private boolean getData(String videoStr) throws JSONException{
-            if(videoStr==null)
+        private boolean getData(String videoStr , String previewStr) throws JSONException{
+            if(videoStr==null && previewStr==null) {
+                booleanTrailers=false;
+                booleanPreview=false;
                 return false;
+            }
             final String key = "key";
             final String result = "results";
+            final String author = "author";
+            final String content = "content";
             String baseVideoUrl = "https://www.youtube.com/watch?v=";
 
             JSONObject videoJson = new JSONObject(videoStr);
             JSONArray videosArray = videoJson.getJSONArray(result);
-
+            JSONObject previewJson = new JSONObject(previewStr);
+            JSONArray previewArray = previewJson.getJSONArray(result);
             for(int i=0;i<videosArray.length();i++){
                 JSONObject oneVideo = videosArray.getJSONObject(i);
                 movie.putTrailer(baseVideoUrl + oneVideo.getString(key));
+            }
+
+            for(int i=0;i<previewArray.length();i++){
+                JSONObject onePreview = previewArray.getJSONObject(i);
+                reviews oneReview = new reviews(onePreview.getString(author),onePreview.getString(content));
+                movie.setOneReview(oneReview);
+            }
+
+            if(videoStr==null && previewStr!=null) {
+                booleanTrailers=false;
+                booleanPreview=true;
+            }else if(videoStr!=null && previewStr==null) {
+                booleanTrailers=true;
+                booleanPreview=false;
+            }
+            else if(videoStr!=null && previewStr!=null){
+                booleanTrailers=true;
+                booleanPreview=true;
             }
             return true;
         }
@@ -214,18 +276,47 @@ public class Details extends Fragment {
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             if(aBoolean) {
-                if (getActivity() != null) {
-                    String hh[] = new String [movie.trailerNum()];
-                    for(int i=1;i<=movie.trailerNum();i++)
-                        hh[i-1]="Trailer "+ i;
-                    s = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, hh);
-                    trailer.setAdapter(s);
+                if(booleanTrailers && !booleanPreview) {
+                    if (getActivity() != null) {
+                        String hh[] = new String[movie.trailerNum()];
+                        for (int i = 1; i <= movie.trailerNum(); i++)
+                            hh[i - 1] = "Trailer " + i + "\n";
+                        videoAdapter = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, hh);
+                        trailer.setAdapter(videoAdapter);
+                        previewAdapter = new PreviewAdapter(movie.getReviews());
+                        expandableListView.setAdapter(previewAdapter);
+                    }
+                }
+                else if (booleanPreview && !booleanTrailers){
+                    if (getActivity() != null) {
+                        String hh[] = new String[movie.trailerNum()];
+
+                        for (int i = 1; i <= movie.trailerNum(); i++)
+                            hh[i - 1] = "Trailer " + i;
+                        previewAdapter = new PreviewAdapter(movie.getReviews());
+                        expandableListView.setAdapter(previewAdapter);
+                        videoAdapter = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, noInterner);
+                        trailer.setAdapter(videoAdapter);
+                    }
+                }
+                else{
+                    if (getActivity() != null) {
+                        String hh[] = new String[movie.trailerNum()];
+                        for (int i = 1; i <= movie.trailerNum(); i++)
+                            hh[i - 1] = "Trailer " + i;
+                        videoAdapter = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, hh);
+                        trailer.setAdapter(videoAdapter);
+                        previewAdapter = new PreviewAdapter(movie.getReviews());
+                        expandableListView.setAdapter(previewAdapter);
+                    }
                 }
             }
             else{
                 if (getActivity() != null) {
-                    s = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, a);
-                    trailer.setAdapter(s);
+                    videoAdapter = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, noInterner);
+                    trailer.setAdapter(videoAdapter);
+                    previewAdapter = new PreviewAdapter(movie.getReviews());
+                    expandableListView.setAdapter(previewAdapter);
                 }
             }
         }
