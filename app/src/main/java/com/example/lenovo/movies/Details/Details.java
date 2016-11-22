@@ -14,12 +14,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.lenovo.movies.Adapters.PreviewAdapter;
+import com.example.lenovo.movies.Data.ControlRealm;
 import com.example.lenovo.movies.Data.Movies;
+import com.example.lenovo.movies.Data.OfflineData;
 import com.example.lenovo.movies.R;
 import com.squareup.picasso.Picasso;
 
@@ -41,22 +45,24 @@ import java.net.URL;
  */
 
 public class Details extends Fragment {
-
+    ImageButton fav;
     Movies movie;
     ImageView movieImage;
     TextView title,rate,date,desc;
     boolean f = false;
     ListView trailer;
     ArrayAdapter<String> videoAdapter;
-    String noInterner[] = {"No Internet Connection"};
+    String noInternet[] = {"No Internet Connection"};
     ExpandableListView expandableListView;
     PreviewAdapter previewAdapter;
     boolean booleanPreview=false,booleanTrailers=false;
+    OfflineData save;
+    ControlRealm controlRealm;
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.details,container,false);
-
+        fav = (ImageButton)root.findViewById(R.id.fav);
         movieImage = (ImageView)root.findViewById(R.id.detailImage);
         title = (TextView)root.findViewById(R.id.detail_title);
         rate = (TextView)root.findViewById(R.id.detail_rate);
@@ -64,7 +70,7 @@ public class Details extends Fragment {
         desc = (TextView)root.findViewById(R.id.detail_desc);
         trailer = (ListView) root.findViewById(R.id.trailers);
         expandableListView = (ExpandableListView)root.findViewById(R.id.previewList);
-        videoAdapter = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, noInterner);
+        videoAdapter = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, noInternet);
         trailer.setAdapter(videoAdapter);
         trailer.setOnTouchListener(new View.OnTouchListener() {
             // Setting on Touch Listener for handling the touch inside ScrollView
@@ -89,7 +95,7 @@ public class Details extends Fragment {
         setRetainInstance(true);
         if(f)
             update();
-
+        save = new OfflineData(getActivity());
         trailer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -104,6 +110,26 @@ public class Details extends Fragment {
         });
 
 
+
+        fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                controlRealm = new ControlRealm(movie,getActivity());
+                if(save.inFavourite(movie.getName())){
+                    fav.setImageResource(R.drawable.notfavourite);
+                    save.removeFromFavourite(movie.getName());
+                    controlRealm.removeMovie(movie.getId());
+                    message(movie.getName());
+                }
+                else{
+                    fav.setImageResource(R.drawable.favourite);
+                    save.putInFavourite(movie.getName());
+                    controlRealm.putMovie();
+                    message(movie.getName());
+                }
+            }
+        });
+
         return root;
     }
 
@@ -116,12 +142,19 @@ public class Details extends Fragment {
     }
 
     public void update(){
-            title.setText(movie.getName());
-            desc.setText(movie.getOverview());
-            rate.setText(Integer.toString(movie.getRate()));
-            date.setText(movie.getDate());
-            Picasso.with(getActivity()).load(movie.getBackdrop()).placeholder(R.mipmap.ic_launcher).into(movieImage);
-            new VideoAsyncTask().execute(movie.getId());
+        title.setText(movie.getName());
+        desc.setText(movie.getOverview());
+        rate.setText(Integer.toString(movie.getRate()));
+        date.setText(movie.getDate());
+        Picasso.with(getActivity()).load(movie.getBackdrop()).placeholder(R.mipmap.ic_launcher).into(movieImage);
+        save = new OfflineData(getActivity());
+        if(getActivity()!=null) {
+            if (!save.inFavourite(movie.getName()))
+                fav.setImageResource(R.drawable.notfavourite);
+            else
+                fav.setImageResource(R.drawable.favourite);
+        }
+        new VideoAsyncTask().execute(movie.getId());
     }
 
 
@@ -295,7 +328,7 @@ public class Details extends Fragment {
                             hh[i - 1] = "Trailer " + i;
                         previewAdapter = new PreviewAdapter(movie.getReviews());
                         expandableListView.setAdapter(previewAdapter);
-                        videoAdapter = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, noInterner);
+                        videoAdapter = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, noInternet);
                         trailer.setAdapter(videoAdapter);
                     }
                 }
@@ -313,7 +346,7 @@ public class Details extends Fragment {
             }
             else{
                 if (getActivity() != null) {
-                    videoAdapter = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, noInterner);
+                    videoAdapter = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, noInternet);
                     trailer.setAdapter(videoAdapter);
                     previewAdapter = new PreviewAdapter(movie.getReviews());
                     expandableListView.setAdapter(previewAdapter);
@@ -322,5 +355,9 @@ public class Details extends Fragment {
         }
     }
 
+
+    public void message(String s){
+        Toast.makeText(getActivity(),s,Toast.LENGTH_SHORT).show();
+    }
 
 }

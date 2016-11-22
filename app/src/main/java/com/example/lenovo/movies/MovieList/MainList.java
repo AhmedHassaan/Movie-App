@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.example.lenovo.movies.Adapters.MoviesAdapter;
 import com.example.lenovo.movies.Data.Movies;
 import com.example.lenovo.movies.Data.OfflineData;
-import com.example.lenovo.movies.Data.connection;
+import com.example.lenovo.movies.Data.MainConnction;
 import com.example.lenovo.movies.R;
 
 import org.json.JSONArray;
@@ -45,7 +45,7 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
     ListView list;
     ArrayList<Movies> moviesList;
     private ProgressDialog dialog;
-    connection con;
+    MainConnction con;
     MoviesAdapter adapter;
     OfflineData save;
     @Nullable
@@ -56,7 +56,7 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
         moviesList = new ArrayList<>();
         save = new OfflineData(getActivity());
         update();
-        con = (connection) getActivity();
+        con = (MainConnction) getActivity();
         list.setOnItemClickListener(this);
         return root;
     }

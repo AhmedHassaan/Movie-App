@@ -1,50 +1,43 @@
-package com.example.lenovo.movies;
+package com.example.lenovo.movies.Favourite;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.example.lenovo.movies.Details.Details;
+import com.example.lenovo.movies.Data.FavouriteConnection;
 import com.example.lenovo.movies.Data.Movies;
-import com.example.lenovo.movies.Data.Setting;
-import com.example.lenovo.movies.Data.MainConnction;
-import com.example.lenovo.movies.Favourite.FavouriteMainActivity;
-import com.example.lenovo.movies.MovieList.MainList;
+import com.example.lenovo.movies.Details.Details;
+import com.example.lenovo.movies.MainActivity;
+import com.example.lenovo.movies.R;
 
-public class MainActivity extends AppCompatActivity implements MainConnction {
+public class FavouriteMainActivity extends AppCompatActivity implements FavouriteConnection {
     Details details;
-    MainList mainList;
     FrameLayout detailLayout;
     Movies movie;
+    FavouriteList favList;
     boolean up = false;
     FragmentTransaction ft = getSupportFragmentManager().beginTransaction(),
             ft2 = getSupportFragmentManager().beginTransaction();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        detailLayout = (FrameLayout)findViewById(R.id.movie_detail);
+        setContentView(R.layout.favourite_main);
+        detailLayout = (FrameLayout)findViewById(R.id.favourite_movie_detail_layout);
         if(savedInstanceState!=null) {
             up = savedInstanceState.getBoolean("first");
         }
         if(!up)
             detailLayout.setY(2000);
         details = new Details();
-        mainList = new MainList();
-    // Replace the contents of the container with the new fragment
-        ft.replace(R.id.movie_list, mainList);
-        ft2.replace(R.id.movie_detail,details);
-        ft2.commit();
-    // or ft.add(R.id.your_placeholder, new FooFragment());
-    // Complete the changes added above
+        favList = new FavouriteList();
+        ft.replace(R.id.favourite_movie_list_layout, favList);
         ft.commit();
-        //setHasOptionsMenu(true);
+        ft2.replace(R.id.favourite_movie_detail_layout,details);
+        ft2.commit();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if(savedInstanceState!=null) {
             if (savedInstanceState.containsKey("name")) {
                 movie = new Movies(savedInstanceState.getString("image"),
@@ -59,32 +52,12 @@ public class MainActivity extends AppCompatActivity implements MainConnction {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu,menu);
-        return true;
-    }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id=item.getItemId();
-        if(id == R.id.action_refresh){
-            mainList.update();
-            return true;
-        }
-
-        else if(id==R.id.action_settings){
-            Intent intent = new Intent(getApplicationContext(), Setting.class);
-            startActivity(intent);
-            return true;
-        }
-        else if(id==R.id.action_favourite){
-            Intent intent = new Intent(MainActivity.this, FavouriteMainActivity.class);
-            startActivity(intent);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    public void setFav(Movies movies) {
+        this.movie=movies;
+        show();
+        details.setNew(movies,false);
     }
 
     private void show(){
@@ -95,13 +68,6 @@ public class MainActivity extends AppCompatActivity implements MainConnction {
         }
     }
 
-    @Override
-    public void set(Movies movies) {
-        this.movie=movies;
-        show();
-        details.setNew(movies,false);
-    }
-
     public void setSave(){
         Toast.makeText(getApplicationContext(),"Save",Toast.LENGTH_SHORT).show();
         details.setNew(movie,true);
@@ -110,7 +76,8 @@ public class MainActivity extends AppCompatActivity implements MainConnction {
     @Override
     public void onBackPressed() {
         if(!up){
-            finish();
+            Intent intent = new Intent(FavouriteMainActivity.this, MainActivity.class);
+            startActivity(intent);
         }
         up = false;
         detailLayout.animate().yBy(2000).setDuration(200).start();

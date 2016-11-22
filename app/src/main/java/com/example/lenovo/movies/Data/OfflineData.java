@@ -27,13 +27,18 @@ public class OfflineData {
         return get.getString("JSON",de);
     }
 
-    public void setDetails(boolean b){
-        set.putBoolean("open",b);
+    public void putInFavourite(String name){
+        set.putBoolean(name,true);
         set.apply();
     }
 
-    public boolean getDetails(){
-        return get.getBoolean("open",false);
+    public boolean inFavourite(String name){
+        return get.getBoolean(name,false);
+    }
+
+    public void removeFromFavourite(String name){
+        set.putBoolean(name,false);
+        set.apply();
     }
 
 }
