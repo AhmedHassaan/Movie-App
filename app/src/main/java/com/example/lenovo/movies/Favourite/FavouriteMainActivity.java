@@ -1,8 +1,8 @@
 package com.example.lenovo.movies.Favourite;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -10,7 +10,6 @@ import android.widget.Toast;
 import com.example.lenovo.movies.Data.FavouriteConnection;
 import com.example.lenovo.movies.Data.Movies;
 import com.example.lenovo.movies.Details.Details;
-import com.example.lenovo.movies.MainActivity;
 import com.example.lenovo.movies.R;
 
 public class FavouriteMainActivity extends AppCompatActivity implements FavouriteConnection {
@@ -76,8 +75,7 @@ public class FavouriteMainActivity extends AppCompatActivity implements Favourit
     @Override
     public void onBackPressed() {
         if(!up){
-            Intent intent = new Intent(FavouriteMainActivity.this, MainActivity.class);
-            startActivity(intent);
+            NavUtils.navigateUpFromSameTask(this);
         }
         up = false;
         detailLayout.animate().yBy(2000).setDuration(200).start();

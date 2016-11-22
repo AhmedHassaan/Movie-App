@@ -1,4 +1,4 @@
-package com.example.lenovo.movies.Data;
+package com.example.lenovo.movies;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -17,7 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.lenovo.movies.R;
+import com.example.lenovo.movies.Data.ControlRealm;
 
 /**
  * Created by Lenovo on 10/31/2016.
@@ -27,6 +27,8 @@ public class Setting extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener {
 
     private AppCompatDelegate mDelegate;
+    Preference pref;
+    ControlRealm controlRealm;
 
 
 
@@ -40,6 +42,15 @@ public class Setting extends PreferenceActivity
         bindPreferenceSummaryToValue(findPreference(getString(R.string.key_sort)));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        pref = findPreference("sample_key");
+        controlRealm = new ControlRealm(getApplicationContext());
+        pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                controlRealm.deleteAll();
+                return false;
+            }
+        });
     }
 
     private void bindPreferenceSummaryToValue(Preference preference) {
@@ -180,5 +191,7 @@ public class Setting extends PreferenceActivity
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
 }

@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.example.lenovo.movies.Details.Details;
 import com.example.lenovo.movies.Data.Movies;
-import com.example.lenovo.movies.Data.Setting;
 import com.example.lenovo.movies.Data.MainConnction;
 import com.example.lenovo.movies.Favourite.FavouriteMainActivity;
 import com.example.lenovo.movies.MovieList.MainList;
@@ -110,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements MainConnction {
     @Override
     public void onBackPressed() {
         if(!up){
-            finish();
+            System.exit(1);
         }
         up = false;
         detailLayout.animate().yBy(2000).setDuration(200).start();

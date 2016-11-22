@@ -15,17 +15,20 @@ import io.realm.RealmResults;
 public class ControlRealm {
     Realm realm;
     Movies movie;
+    OfflineData save;
 
 
     public ControlRealm(Movies movie, Context context) {
         this.movie = movie;
         realm = Realm.getInstance(new RealmConfiguration.Builder(context)
         .name("Movie.Realm").build());
+        save = new OfflineData(context);
     }
 
     public ControlRealm(Context context){
         realm = Realm.getInstance(new RealmConfiguration.Builder(context)
                 .name("Movie.Realm").build());
+        save = new OfflineData(context);
     }
 
     public Movies getMovie() {
@@ -70,5 +73,18 @@ public class ControlRealm {
             all.add(m);
         }
         return all;
+    }
+
+    public void deleteAll(){
+        final RealmResults<FavouriteMovie> result = realm.where(FavouriteMovie.class).findAll();
+        for(FavouriteMovie f : result){
+            save.removeFromFavourite(f.getName());
+        }
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                result.deleteAllFromRealm();
+            }
+        });
     }
 }
