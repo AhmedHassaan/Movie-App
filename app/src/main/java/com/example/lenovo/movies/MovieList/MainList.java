@@ -13,13 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.GridView;
 import android.widget.Toast;
 
-import com.example.lenovo.movies.Adapters.MoviesAdapter;
+import com.example.lenovo.movies.Adapters.ViewAdapter;
+import com.example.lenovo.movies.Data.MainConnction;
 import com.example.lenovo.movies.Data.Movies;
 import com.example.lenovo.movies.Data.OfflineData;
-import com.example.lenovo.movies.Data.MainConnction;
 import com.example.lenovo.movies.R;
 
 import org.json.JSONArray;
@@ -42,22 +42,22 @@ import java.util.Collections;
  */
 
 public class MainList extends Fragment implements AdapterView.OnItemClickListener {
-    ListView list;
     ArrayList<Movies> moviesList;
     private ProgressDialog dialog;
     MainConnction con;
-    MoviesAdapter adapter;
     OfflineData save;
+    ViewAdapter gridAdapter;
+    GridView gridView;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.mainlist_fragment,container,false);
-        list = (ListView)root.findViewById(R.id.movieList);
+        View root = inflater.inflate(R.layout.gridview_fragment,container,false);
         moviesList = new ArrayList<>();
         save = new OfflineData(getActivity());
+        gridView = (GridView) root.findViewById(R.id.movie_gridview);
         update();
         con = (MainConnction) getActivity();
-        list.setOnItemClickListener(this);
+        gridView.setOnItemClickListener(this);
         return root;
     }
 
@@ -210,9 +210,10 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
             if(aBoolean){
                 save.setJson(movieJson);
                 sortMovies();
-                if(getActivity() != null)
-                    adapter = new MoviesAdapter(getActivity(),R.layout.listitem,moviesList);
-                list.setAdapter(adapter);
+                if(getActivity() != null) {
+                    gridAdapter = new ViewAdapter(getActivity(), R.layout.griditem, moviesList);
+                }
+                gridView.setAdapter(gridAdapter);
             }
             else{
                 if(getActivity() != null)
@@ -225,9 +226,10 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
                 }
                 if(b){
                     sortMovies();
-                    if(getActivity() != null)
-                        adapter = new MoviesAdapter(getActivity(),R.layout.listitem,moviesList);
-                    list.setAdapter(adapter);
+                    if(getActivity() != null) {
+                        gridAdapter = new ViewAdapter(getActivity(), R.layout.griditem, moviesList);
+                    }
+                    gridView.setAdapter(gridAdapter);
                 }
                 else
                     Toast.makeText(getActivity(),"No Data",Toast.LENGTH_LONG).show();

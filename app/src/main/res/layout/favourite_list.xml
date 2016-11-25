@@ -4,11 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ListView
+    <GridView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/favourite_movieList"
-        tools:listitem="@layout/listitem"
-        />
+        android:id="@+id/fav_movie_gridview"
+        android:verticalSpacing="0dp"
+        android:horizontalSpacing="0dp"
+        android:numColumns="3" />
 
 </FrameLayout>

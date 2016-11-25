@@ -1,23 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ListPreference
-        android:title="@string/view_title_def"
-        android:key="@string/key_view"
-        android:defaultValue="@string/view_default_val"
-        android:entryValues="@array/pref_view_values"
-        android:entries="@array/pref_view_options"/>
+    <PreferenceCategory android:title="Movies"
+        android:layout="@layout/textview">
+        <ListPreference
+            android:title="@string/view_title_def"
+            android:key="@string/key_view"
+            android:defaultValue="@string/view_default_val"
+            android:entryValues="@array/pref_view_values"
+            android:entries="@array/pref_view_options"/>
 
-    <ListPreference
-        android:title="@string/sort_title_def"
-        android:key="@string/key_sort"
-        android:defaultValue="@string/sort_default_val"
-        android:entryValues="@array/pref_sort_values"
-        android:entries="@array/pref_sort_options"/>
+        <ListPreference
+            android:title="@string/sort_title_def"
+            android:key="@string/key_sort"
+            android:defaultValue="@string/sort_default_val"
+            android:entryValues="@array/pref_sort_values"
+            android:entries="@array/pref_sort_options"/>
+    </PreferenceCategory>
 
 
-    <Preference
-        android:key="sample_key"
-        android:title="Clear Favourite"/>
+    <PreferenceCategory android:title="Favourite"
+        android:layout="@layout/textview">
+
+        <Preference
+            android:key="sample_key"
+            android:title="Clear Favourite"/>
+    </PreferenceCategory>
 
 </PreferenceScreen>

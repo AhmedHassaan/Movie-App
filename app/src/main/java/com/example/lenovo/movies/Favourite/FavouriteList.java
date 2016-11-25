@@ -7,9 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.GridView;
 
-import com.example.lenovo.movies.Adapters.MoviesAdapter;
+import com.example.lenovo.movies.Adapters.ViewAdapter;
 import com.example.lenovo.movies.Data.ControlRealm;
 import com.example.lenovo.movies.Data.FavouriteConnection;
 import com.example.lenovo.movies.Data.Movies;
@@ -25,15 +25,15 @@ public class FavouriteList extends Fragment implements AdapterView.OnItemClickLi
 
 
     FavouriteConnection connection;
-    ListView list;
+    GridView list;
     ArrayList<Movies> moviesList;
-    MoviesAdapter adapter;
+    ViewAdapter adapter;
     ControlRealm controlRealm;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.favourite_list,container,false);
-        list = (ListView)root.findViewById(R.id.favourite_movieList);
+        list = (GridView)root.findViewById(R.id.fav_movie_gridview);
         moviesList = new ArrayList<>();
         controlRealm = new ControlRealm(getActivity());
         connection = (FavouriteConnection) getActivity();
@@ -44,8 +44,9 @@ public class FavouriteList extends Fragment implements AdapterView.OnItemClickLi
 
     public void update(){
         moviesList = controlRealm.getAllMovies();
-        if(getActivity() != null)
-            adapter = new MoviesAdapter(getActivity(),R.layout.listitem,moviesList);
+        if(getActivity() != null) {
+            adapter = new ViewAdapter(getActivity(), R.layout.griditem, moviesList);
+        }
         list.setAdapter(adapter);
     }
 
