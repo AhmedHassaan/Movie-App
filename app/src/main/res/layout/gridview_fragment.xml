@@ -5,10 +5,11 @@
 
 
     <GridView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/movie_gridview"
-        android:verticalSpacing="0dp"
-        android:horizontalSpacing="0dp"
-        android:numColumns="3" />
+    android:id="@+id/movie_gridview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnWidth="90dp"
+    android:gravity="center"
+    android:numColumns="auto_fit"
+    android:stretchMode="columnWidth" />
 </FrameLayout>
