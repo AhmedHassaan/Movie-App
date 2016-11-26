@@ -32,8 +32,8 @@ public class FavouriteList extends Fragment implements AdapterView.OnItemClickLi
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.favourite_list,container,false);
-        list = (GridView)root.findViewById(R.id.fav_movie_gridview);
+        View root = inflater.inflate(R.layout.gridview_fragment,container,false);
+        list = (GridView)root.findViewById(R.id.movie_gridview);
         moviesList = new ArrayList<>();
         controlRealm = new ControlRealm(getActivity());
         connection = (FavouriteConnection) getActivity();
