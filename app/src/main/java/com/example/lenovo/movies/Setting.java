@@ -176,13 +176,6 @@ public class Setting extends PreferenceActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-//                onBackPressed();
-
-                //--------- return to home screen
-//                Intent startMain = new Intent(Intent.ACTION_MAIN);
-//                startMain.addCategory(Intent.CATEGORY_HOME);
-//                startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                startActivity(startMain);
 
                 NavUtils.navigateUpFromSameTask(this);
 
@@ -192,6 +185,10 @@ public class Setting extends PreferenceActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        NavUtils.navigateUpFromSameTask(this);
+    }
 
 
 }

@@ -1,79 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="150dp"
-        android:src="@mipmap/ic_launcher"
-        android:layout_marginLeft="21dp"
-        android:layout_marginStart="21dp"
-        android:id="@+id/imageView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Name"
-        android:textSize="30sp"
-        android:layout_marginLeft="63dp"
-        android:layout_marginStart="63dp"
-        android:id="@+id/textView"
-        android:layout_alignTop="@+id/imageView"
-        android:layout_toRightOf="@+id/imageView"
-        android:layout_toEndOf="@+id/imageView"
-        android:layout_marginTop="25dp" />
+        <ImageView
+            android:id="@+id/detailImage"
+            android:layout_width="100dp"
+            android:layout_height="150dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="21dp"
+            android:layout_marginStart="21dp"
+            android:layout_marginTop="30dp"
+            android:src="@mipmap/ic_launcher" />
 
 
-    <ImageView
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:id="@+id/star"
-        android:src="@drawable/starfull"
-        android:layout_marginTop="16dp"
-        android:layout_below="@+id/textView"
-        android:layout_marginLeft="40dp"
-        android:layout_toRightOf="@+id/imageView"/>
+        <ImageView
+            android:id="@+id/star"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_below="@+id/detail_title"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@+id/detailImage"
+            android:src="@drawable/starfull" />
 
-        <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Description .................."
-        android:textSize="40sp"
-        android:layout_below="@+id/imageView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="17dp"
-        android:id="@+id/textView3" />
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Trailers : "
-        android:id="@+id/text"
-        android:textSize="30sp"
-        android:layout_below="@+id/textView3"
-        android:layout_alignRight="@+id/imageView"
-        android:layout_alignEnd="@+id/imageView"
-        android:layout_marginTop="71dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textView"
-            android:text="Rate"
-            android:textSize="40sp"
+            android:layout_below="@+id/detail_title"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:layout_toRightOf="@+id/star"/>
+            android:layout_toRightOf="@+id/star"
+            android:textColor="@color/black"
+            android:text="Rate"
+            android:id="@+id/detail_rate"
+            android:textSize="40sp" />
+
+
+        <TextView
+            android:id="@+id/detail_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/detail_date"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="Description .................."
+            android:textSize="25sp" />
+
+
+        <TextView
+            android:id="@+id/detail_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:layout_marginRight="10dp"
+            android:layout_below="@+id/fav"
+            android:layout_alignLeft="@+id/star"
+            android:layout_alignStart="@+id/star" />
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/notfavourite"
+            android:scaleType="centerCrop"
+            android:id="@+id/fav"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="50dp"
+            android:background="@android:color/transparent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_below="@id/detail_desc"
+            android:layout_marginTop="30dp"
+            android:text="Trailers"
+            android:id="@+id/trailers"
+            android:textSize="20sp"
+            android:background="@android:color/transparent"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_below="@id/trailers"
+            android:layout_marginTop="10dp"
+            android:text="Reviews"
+            android:textSize="20sp"
+            android:id="@+id/preview"
+            android:background="@android:color/transparent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="date : "
+            android:textSize="25sp"
+            android:id="@+id/detail_date"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/black"
+            android:paddingLeft="5dp"
+            android:layout_below="@+id/detail_rate"
+            android:layout_alignLeft="@+id/star"
+            android:layout_alignStart="@+id/star" />
+
 
     </RelativeLayout>
 </ScrollView>

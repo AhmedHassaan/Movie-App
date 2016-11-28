@@ -115,7 +115,7 @@ public class MainList extends Fragment implements AdapterView.OnItemClickListene
             final String date = "release_date";
             final String rate = "vote_average";
             final String id = "id";
-            String baseImageNormal = "https://image.tmdb.org/t/p/w300";
+            String baseImageNormal = "https://image.tmdb.org/t/p/w185";
             String baseImageBig = "https://image.tmdb.org/t/p/w300";
 
             JSONObject movieJson = new JSONObject(moviesStr);

@@ -110,5 +110,7 @@ public class Movies {
         }
     };
 
-
+    public ArrayList<String> getTrailers() {
+        return trailers;
+    }
 }

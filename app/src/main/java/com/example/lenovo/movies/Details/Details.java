@@ -8,23 +8,20 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ExpandableListView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.lenovo.movies.Adapters.PreviewAdapter;
 import com.example.lenovo.movies.Data.ControlRealm;
 import com.example.lenovo.movies.Data.Movies;
 import com.example.lenovo.movies.Data.OfflineData;
+import com.example.lenovo.movies.Previews;
 import com.example.lenovo.movies.R;
+import com.example.lenovo.movies.Trailers;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -39,6 +36,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * Created by Lenovo on 10/31/2016.
@@ -50,67 +48,28 @@ public class Details extends Fragment {
     ImageView movieImage;
     TextView title,rate,date,desc;
     boolean f = false;
-    ListView trailer;
-    ArrayAdapter<String> videoAdapter;
-    String noInternet[] = {"No Internet Connection"};
-    ExpandableListView expandableListView;
-    PreviewAdapter previewAdapter;
     boolean booleanPreview=false,booleanTrailers=false;
     OfflineData save;
     ControlRealm controlRealm;
+    boolean inFavourite=false;
+    Button goToTrailer,goToPreview;
+    ArrayList<reviews> reviewses = new ArrayList<>();
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.details,container,false);
+        View root = inflater.inflate(R.layout.test_details,container,false);
         fav = (ImageButton)root.findViewById(R.id.fav);
         movieImage = (ImageView)root.findViewById(R.id.detailImage);
         title = (TextView)root.findViewById(R.id.detail_title);
         rate = (TextView)root.findViewById(R.id.detail_rate);
         date = (TextView)root.findViewById(R.id.detail_date);
         desc = (TextView)root.findViewById(R.id.detail_desc);
-        trailer = (ListView) root.findViewById(R.id.trailers);
-        expandableListView = (ExpandableListView)root.findViewById(R.id.previewList);
-        videoAdapter = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, noInternet);
-        trailer.setAdapter(videoAdapter);
-        trailer.setOnTouchListener(new View.OnTouchListener() {
-            // Setting on Touch Listener for handling the touch inside ScrollView
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // Disallow the touch request for parent scroll on touch of child view
-                v.getParent().requestDisallowInterceptTouchEvent(true);
-                return false;
-            }
-        });
-
-
-        expandableListView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-
-                view.getParent().requestDisallowInterceptTouchEvent(true);
-                return false;
-            }
-        });
-
+        goToPreview = (Button)root.findViewById(R.id.preview);
+        goToTrailer = (Button)root.findViewById(R.id.trailers);
         setRetainInstance(true);
         if(f)
             update();
         save = new OfflineData(getActivity());
-        trailer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String click = movie.getTrailer(i);
-                if(!click.equals("No Internet Connection"))
-                {
-                    Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(click));
-                    intent.putExtra("force_fullscreen",true);
-                    startActivity(intent);
-                }
-            }
-        });
-
-
-
         fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,17 +77,47 @@ public class Details extends Fragment {
                 if(save.inFavourite(movie.getName())){
                     fav.setImageResource(R.drawable.notfavourite);
                     save.removeFromFavourite(movie.getName());
+                    message("Removed from Favourite");
                     controlRealm.removeMovie(movie.getId());
-                    message(movie.getName());
+                    if(inFavourite){
+                        getActivity().finish();
+                        startActivity(getActivity().getIntent());
+                    }
                 }
                 else{
                     fav.setImageResource(R.drawable.favourite);
                     save.putInFavourite(movie.getName());
                     controlRealm.putMovie();
-                    message(movie.getName());
+                    message("Added to Favourite");
                 }
             }
         });
+
+        goToPreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!reviewses.isEmpty()) {
+                    Intent intent = new Intent(getActivity(), Previews.class);
+                    intent.putParcelableArrayListExtra("reviews", reviewses);
+                    startActivity(intent);
+                }
+                else
+                    message("No Review available now");
+            }
+        });
+        goToTrailer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!movie.getTrailers().isEmpty()) {
+                    Intent intent = new Intent(getActivity(), Trailers.class);
+                    intent.putStringArrayListExtra("trailers", movie.getTrailers());
+                    startActivity(intent);
+                }
+                else
+                    message("No Trailer available now");
+            }
+        });
+
 
         return root;
     }
@@ -141,16 +130,21 @@ public class Details extends Fragment {
         }
     }
 
+    public void setInFavourite(boolean b){
+        inFavourite=b;
+    }
+
     public void update(){
         title.setText(movie.getName());
         desc.setText(movie.getOverview());
         rate.setText(Integer.toString(movie.getRate()));
         date.setText(movie.getDate());
-        Picasso.with(getActivity()).load(movie.getBackdrop()).placeholder(R.mipmap.ic_launcher).into(movieImage);
+        Picasso.with(getActivity()).load(movie.getImage()).placeholder(R.mipmap.ic_launcher).into(movieImage);
         save = new OfflineData(getActivity());
         if(getActivity()!=null) {
-            if (!save.inFavourite(movie.getName()))
+            if (!save.inFavourite(movie.getName())) {
                 fav.setImageResource(R.drawable.notfavourite);
+            }
             else
                 fav.setImageResource(R.drawable.favourite);
         }
@@ -290,6 +284,7 @@ public class Details extends Fragment {
                 JSONObject onePreview = previewArray.getJSONObject(i);
                 reviews oneReview = new reviews(onePreview.getString(author),onePreview.getString(content));
                 movie.setOneReview(oneReview);
+                reviewses.add(oneReview);
             }
 
             if(videoStr==null && previewStr!=null) {
@@ -304,54 +299,6 @@ public class Details extends Fragment {
                 booleanPreview=true;
             }
             return true;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            if(aBoolean) {
-                if(booleanTrailers && !booleanPreview) {
-                    if (getActivity() != null) {
-                        String hh[] = new String[movie.trailerNum()];
-                        for (int i = 1; i <= movie.trailerNum(); i++)
-                            hh[i - 1] = "Trailer " + i + "\n";
-                        videoAdapter = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, hh);
-                        trailer.setAdapter(videoAdapter);
-                        previewAdapter = new PreviewAdapter(movie.getReviews());
-                        expandableListView.setAdapter(previewAdapter);
-                    }
-                }
-                else if (booleanPreview && !booleanTrailers){
-                    if (getActivity() != null) {
-                        String hh[] = new String[movie.trailerNum()];
-
-                        for (int i = 1; i <= movie.trailerNum(); i++)
-                            hh[i - 1] = "Trailer " + i;
-                        previewAdapter = new PreviewAdapter(movie.getReviews());
-                        expandableListView.setAdapter(previewAdapter);
-                        videoAdapter = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, noInternet);
-                        trailer.setAdapter(videoAdapter);
-                    }
-                }
-                else{
-                    if (getActivity() != null) {
-                        String hh[] = new String[movie.trailerNum()];
-                        for (int i = 1; i <= movie.trailerNum(); i++)
-                            hh[i - 1] = "Trailer " + i;
-                        videoAdapter = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, hh);
-                        trailer.setAdapter(videoAdapter);
-                        previewAdapter = new PreviewAdapter(movie.getReviews());
-                        expandableListView.setAdapter(previewAdapter);
-                    }
-                }
-            }
-            else{
-                if (getActivity() != null) {
-                    videoAdapter = new ArrayAdapter<String>(getActivity(), R.layout.one_trailer, R.id.one, noInternet);
-                    trailer.setAdapter(videoAdapter);
-                    previewAdapter = new PreviewAdapter(movie.getReviews());
-                    expandableListView.setAdapter(previewAdapter);
-                }
-            }
         }
     }
 

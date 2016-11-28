@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements MainConnction {
                 setSave();
             }
         }
+        details.setInFavourite(false);
     }
 
     @Override

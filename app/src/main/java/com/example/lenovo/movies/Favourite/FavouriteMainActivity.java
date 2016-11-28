@@ -49,6 +49,7 @@ public class FavouriteMainActivity extends AppCompatActivity implements Favourit
                 setSave();
             }
         }
+        details.setInFavourite(true);
     }
 
 
