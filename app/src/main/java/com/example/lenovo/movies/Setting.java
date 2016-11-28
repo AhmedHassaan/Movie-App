@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.lenovo.movies.Data.ControlRealm;
 
@@ -48,6 +49,7 @@ public class Setting extends PreferenceActivity
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 controlRealm.deleteAll();
+                Toast.makeText(getApplicationContext(),"Clear Done",Toast.LENGTH_SHORT).show();
                 return false;
             }
         });

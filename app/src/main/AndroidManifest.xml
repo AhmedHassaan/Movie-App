@@ -36,10 +36,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".Previews"
+        <activity android:name=".Details.Previews"
             android:theme="@style/Theme.AppCompat.Light.Dialog"
             android:label="Review"/>
-        <activity android:name=".Trailers"
+        <activity android:name=".Details.Trailers"
             android:theme="@style/Theme.AppCompat.Light.Dialog"
             android:label="Trailers"/>
     </application>

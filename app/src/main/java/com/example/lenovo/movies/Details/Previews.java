@@ -1,4 +1,4 @@
-package com.example.lenovo.movies;
+package com.example.lenovo.movies.Details;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,6 +6,7 @@ import android.widget.ExpandableListView;
 
 import com.example.lenovo.movies.Adapters.PreviewAdapter;
 import com.example.lenovo.movies.Details.reviews;
+import com.example.lenovo.movies.R;
 
 import java.util.ArrayList;
 

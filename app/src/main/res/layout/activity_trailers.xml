@@ -4,7 +4,7 @@
     android:id="@+id/activity_trailers"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.lenovo.movies.Trailers">
+    tools:context="com.example.lenovo.movies.Details.Trailers">
 
     <ListView
         android:layout_width="match_parent"

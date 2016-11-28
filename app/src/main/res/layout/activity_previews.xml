@@ -4,7 +4,7 @@
     android:id="@+id/activity_previews"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.lenovo.movies.Previews">
+    tools:context="com.example.lenovo.movies.Details.Previews">
 
     <ExpandableListView
         android:layout_width="wrap_content"

@@ -19,9 +19,7 @@ import android.widget.Toast;
 import com.example.lenovo.movies.Data.ControlRealm;
 import com.example.lenovo.movies.Data.Movies;
 import com.example.lenovo.movies.Data.OfflineData;
-import com.example.lenovo.movies.Previews;
 import com.example.lenovo.movies.R;
-import com.example.lenovo.movies.Trailers;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
